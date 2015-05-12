@@ -1,0 +1,74 @@
+<div class="page-header"><h1>Software</h1></div>
+<pagination total-items="140" ng-model="soft.page" max-size="10" class="pagination-sm" boundary-links="true" items-per-page="soft.perPage" ng-change="pageChanged()"></pagination>
+<div class="row">
+    <div class="col-md-3 col-md-push-9">
+        <form>
+            <div class="form-group">
+                <input type="text" class="form-control" ng-model="soft.search" placeholder="Search software, locations, more..." ng-change="pageChanged()">
+            </div>
+            <div class="form-group">
+                <div class="btn-group btn-group-justified">
+                    <label class="btn btn-default active" ng-model="soft.os" btn-radio="''" ng-change="pageChanged()" uncheckable>All</label>
+                    <label class="btn btn-default" ng-model="soft.os" btn-radio="1" ng-change="pageChanged()" uncheckable><span class="fa fa-fw fa-windows"></span></label>
+                    <label class="btn btn-default" ng-model="soft.os" btn-radio="2" ng-change="pageChanged()" uncheckable><span class="fa fa-fw fa-apple"></span></label>
+                    <label class="btn btn-default" ng-model="soft.os" btn-radio="3" ng-change="pageChanged()" uncheckable><span class="fa fa-fw fa-linux"></span></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <h5>Locations</h5>
+                <div class="radio">
+                    <label>
+                        <input type="radio" value="" ng-model="soft.loc" ng-change="pageChanged()" checked>
+                        All Locations
+                    </label>
+                </div>
+                <div class="radio" ng-repeat="loc in software.locations">
+                    <label>
+                        <input type="radio" value="{{loc.name}}" ng-model="soft.loc" ng-change="pageChanged()">
+                        {{loc.name}}
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <h5>Categories</h5>
+                <div class="radio">
+                    <label>
+                        <input type="radio" value="" ng-model="soft.cat" ng-change="pageChanged()">
+                        All categories
+                    </label>
+                </div>
+                <div class="radio" ng-repeat="cat in software.categories">
+                    <label>
+                        <input type="radio" value="{{cat.name}}" ng-model="soft.cat" ng-change="pageChanged()">
+                        {{cat.name}}
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-9 col-md-pull-3">
+        <div class="media" ng-repeat="item in software.software | filter:soft.cat | filter:soft.loc | filter:soft.search | filterBy:['os']:soft.os">
+            <div class="media-left">
+                <a href="#">
+                    <img class="media-object" ng-src="{{item.icon}}" alt="{{item.title}}" title="{{item.title}}" style="width: 64px; height: 64px; min-width: 100% !important;">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">
+                    {{item.title}}
+                </h4>
+                <span ng-repeat="ver in item.versions" style="padding-left: 5px; color: #333;"><span class="fa fa-{{ver.osName}} text-muted"></span> {{ver.version}}</span>
+                <div class="details-context">
+                    <span ng-repeat="loc in item.locations">{{loc.name}}</span>
+                </div>
+                <div>
+                    {{item.description}}
+                </div>
+                <div class="details-context" style="color: #333;">
+                    <a ng-repeat="link in item.links" ng-href="{{link.url}}">{{link.title}}</a>
+                </div>
+                <span ng-bind-html="item.details"></span>
+            </div>
+        </div>
+    </div>
+</div>
