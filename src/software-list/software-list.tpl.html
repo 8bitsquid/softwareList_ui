@@ -1,4 +1,4 @@
-<div class="page-header"><h1>Software</h1></div>
+<div class="page-header"><h1>Libraries' Software List</h1></div>
 
 <div class="row">
     <div class="col-md-3 col-md-push-9">
@@ -53,9 +53,7 @@
 
         <div class="media" ng-repeat="item in filteredSoft = (software.software | filter:soft.cat | filter:soft.loc | filter:soft.search | filterBy:['os']:soft.os)">
             <div class="media-left">
-                <a href="#">
-                    <img class="media-object" ng-src="{{item.icon}}" alt="{{item.title}}" title="{{item.title}}">
-                </a>
+                <img class="media-object" ng-src="{{item.icon}}" alt="{{item.title}}" title="{{item.title}}">
             </div>
             <div class="media-body">
                 <h4 class="media-heading">
@@ -70,9 +68,13 @@
                     {{item.description}}
                 </div>
                 <div class="details hidden-xs">
-                    <div class="software-links pull-left" style="color: #333;">
+                    <div class="software-links pull-left">
                         <h5>Tutorials &amp; Guides</h5>
-                        <a ng-repeat="link in item.links" ng-href="{{link.url}}">{{link.title}}</a>
+                        <ul>
+                            <li ng-repeat="link in item.links">
+                                <a ng-href="{{link.url}}">{{link.title}}</a>
+                            </li>
+                        </ul>
                     </div>
                     <div class="pull-left">
                         <h5>Who can use it</h5>
