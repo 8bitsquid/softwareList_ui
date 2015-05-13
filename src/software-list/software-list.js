@@ -45,17 +45,22 @@ angular.module('ualib.softwareList')
 
     .controller('SoftwareListCtrl', ['$scope', 'software', '$location', function($scope, software, $location){
         var params = $location.search();
-        $scope.software = software;
-        var soft = $scope.soft = {
+        var soft = $scope.soft = {};
+        var defaults = {
             os: '',
             search: '',
             cat: '',
-            loc: ''
+            loc: '',
+            page: 1,
+            perPage: 20
         };
-        soft.page = angular.isDefined(params.page) ? params.page : 1;
-        soft.perPage = angular.isDefined(params.perPage) ? params.perPage : 20;
+        angular.copy(defaults, $scope.soft);
+        angular.extend($scope.soft, params);
 
-        $scope.pageChanged = function(){
+        $scope.software = software;
+
+
+        $scope.update = function(){
             var q = {};
             angular.forEach(soft, function(val, key){
                if (angular.isDefined(val) && val !== ''){
@@ -64,5 +69,6 @@ angular.module('ualib.softwareList')
             });
             $location.search(q);
         };
+
 
     }]);
