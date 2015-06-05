@@ -1,6 +1,6 @@
 {
   "name": "ualib.softwareList",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Software List for University of Alabama Libraries",
   "main": "Gruntfile.js",
   "scripts": {

@@ -1,4 +1,7 @@
-.software-list-container .media img {
+.software-list-container .software-item {
+  margin-top: 30px;
+}
+.software-list-container .software-item img {
   width: 64px;
   height: 64px;
 }

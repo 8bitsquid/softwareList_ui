@@ -43,22 +43,50 @@ angular.module('ualib.softwareList')
             });
     }])
 
-    .controller('SoftwareListCtrl', ['$scope', 'software', '$location', function($scope, software, $location){
-        var params = $location.search();
-        var soft = $scope.soft = {};
+    .controller('SoftwareListCtrl', ['$scope', 'software', '$location', '$filter', function($scope, software, $location, $filter){
+        var softwareList = [];
+        $scope.soft = {};
         var defaults = {
             os: '',
             search: '',
             cat: '',
-            loc: '',
-            page: 1,
-            perPage: 20
+            loc: ''
         };
-        angular.copy(defaults, $scope.soft);
-        angular.extend($scope.soft, params);
 
-        $scope.software = software;
 
+        software.$promise.then(function(data){
+            softwareList = data.software;
+            $scope.resetFilters();
+
+            $scope.categories = data.categories;
+            $scope.locations = data.locations.filter(function(loc){
+                return parseInt(loc.parent) === 0;
+            });
+
+            //Apply URI query params to scope
+            var params = $location.search();
+            for (var p in params){
+                if ($scope.pager.hasOwnProperty(p)){
+                    $scope.pager[p] = params[p];
+                }
+                if ($scope.soft.hasOwnProperty(p)){
+                    $scope.soft[p] = params[p];
+                }
+            }
+
+            processSoftwareList(data.software);
+        });
+
+        var filterWatcher = $scope.$watch('soft', function(newVal, oldVal){
+            for (var filter in newVal){
+                if (newVal[filter] !== ''){
+                    $location.search(filter, newVal[filter]);
+                }
+                else{
+                    $location.search(filter, null);
+                }
+            }
+        }, true);
 
         $scope.update = function(){
             var q = {};
@@ -69,6 +97,44 @@ angular.module('ualib.softwareList')
             });
             $location.search(q);
         };
+
+        $scope.resetFilters = function(){
+            $scope.pager = {
+                page: 1,
+                perPage: 20,
+                maxSize: 10,
+                totalItems: 0
+            };
+            angular.copy(defaults, $scope.soft);
+        };
+
+        //Scope watchers and listeners
+        $scope.$on('$locationChangeSuccess', function(){
+            processSoftwareList(softwareList);
+        });
+
+        $scope.$on('$destroy', function(){
+            filterWatcher();
+        });
+
+        function processSoftwareList(softwareList){
+            var filtered = softwareList;
+
+            filtered = $filter('filter')(filtered, $scope.soft.cat);
+            filtered = $filter('filter')(filtered, $scope.soft.loc);
+            filtered = $filter('filter')(filtered, $scope.soft.search);
+            filtered = $filter('filterBy')(filtered, ['os'], $scope.soft.os);
+
+            $scope.filteredSoft = filtered;
+
+            $scope.pager.totalItems = $scope.filteredSoft.length;
+            $scope.pager.firstItem = (($scope.pager.page-1)*$scope.pager.perPage)+1;
+            $scope.pager.lastItem = $scope.pager.page*($scope.pager.totalItems < $scope.pager.maxSize ? $scope.pager.totalItems : $scope.pager.perPage);
+            var numPages =  Math.floor($scope.pager.totalItems / $scope.pager.maxSize);
+            if (numPages < $scope.pager.page){
+                $scope.pager.page = numPages || 1;
+            }
+        }
 
 
     }]);

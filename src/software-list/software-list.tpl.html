@@ -4,27 +4,31 @@
     <div class="col-md-3 col-md-push-9">
         <form>
             <div class="form-group">
-                <input type="text" class="form-control" ng-model="soft.search" placeholder="Search software, locations, etc..." ng-change="update()">
+                <span class="page-header">
+                    <h4>Filter Software List By</h4>
+                </span>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" ng-model="soft.search" placeholder="Search software, locations, etc...">
             </div>
             <div class="form-group">
                 <div class="btn-group btn-group-justified">
-                    <label class="btn btn-default active" ng-model="soft.os" btn-radio="''" ng-change="update()" uncheckable>All</label>
-                    <label class="btn btn-default" ng-model="soft.os" btn-radio="'1'" ng-change="update()" uncheckable><span class="fa fa-fw fa-windows"></span></label>
-                    <label class="btn btn-default" ng-model="soft.os" btn-radio="'2'" ng-change="update()" uncheckable><span class="fa fa-fw fa-apple"></span></label>
-                    <label class="btn btn-default" ng-model="soft.os" btn-radio="'3'" ng-change="update()" uncheckable><span class="fa fa-fw fa-linux"></span></label>
+                    <label class="btn btn-default active" ng-model="soft.os" btn-radio="''" uncheckable>All</label>
+                    <label class="btn btn-default" ng-model="soft.os" btn-radio="'1'" uncheckable><span class="fa fa-fw fa-windows"></span></label>
+                    <label class="btn btn-default" ng-model="soft.os" btn-radio="'2'" uncheckable><span class="fa fa-fw fa-apple"></span></label>
                 </div>
             </div>
             <div class="form-group hidden-xs">
                 <h5>Locations</h5>
                 <div class="radio">
                     <label>
-                        <input type="radio" value="" ng-model="soft.loc" ng-change="update()" checked>
+                        <input type="radio" value="" ng-model="soft.loc" checked>
                         All Locations
                     </label>
                 </div>
-                <div class="radio" ng-repeat="loc in software.locations">
+                <div class="radio" ng-repeat="loc in locations">
                     <label>
-                        <input type="radio" value="{{loc.name}}" ng-model="soft.loc" ng-change="update()">
+                        <input type="radio" value="{{loc.name}}" ng-model="soft.loc">
                         {{loc.name}}
                     </label>
                 </div>
@@ -33,13 +37,13 @@
                 <h5>Categories</h5>
                 <div class="radio">
                     <label>
-                        <input type="radio" value="" ng-model="soft.cat" ng-change="update()">
+                        <input type="radio" value="" ng-model="soft.cat">
                         All categories
                     </label>
                 </div>
-                <div class="radio" ng-repeat="cat in software.categories">
+                <div class="radio" ng-repeat="cat in categories">
                     <label>
-                        <input type="radio" value="{{cat.name}}" ng-model="soft.cat" ng-change="update()">
+                        <input type="radio" value="{{cat.name}}" ng-model="soft.cat">
                         {{cat.name}}
                     </label>
                 </div>
@@ -47,45 +51,69 @@
         </form>
     </div>
     <div class="col-md-9 col-md-pull-3 software-list-container">
-        <div class="text-center">
-            <pagination total-items="filteredSoft.length" ng-model="soft.page" max-size="10" class="pagination-sm" boundary-links="true" items-per-page="soft.perPage" ng-change="update()" ng-if="filteredSoft.length > soft.perPage"></pagination>
+        <div class="text-right" ng-show="pager.totalItems > 0">
+            Showing {{pager.firstItem}}-{{pager.lastItem}} of {{pager.totalItems}} results
         </div>
 
-        <div class="media" ng-repeat="item in filteredSoft = (software.software | filter:soft.cat | filter:soft.loc | filter:soft.search | filterBy:['os']:soft.os)">
+        <div ng-if="(soft.cat || soft.os || soft.loc) && pager.totalItems > 0">
+
+            <ol class="breadcrumb">
+                <li ng-if="soft.os"><strong>OS:</strong> <button type="button" class="btn btn-default" ng-click="soft.os = ''">{{soft.os == 1 ? 'Windows' : 'OS X'}} <span class="text-muted" aria-hidden="true">&times;</span></button></li>
+                <li ng-if="soft.loc"><strong>Location:</strong> <button type="button" class="btn btn-default" ng-click="soft.loc = ''">{{soft.loc}} <span class="text-muted" aria-hidden="true">&times;</span></button></li>
+                <li ng-if="soft.cat"><strong>Category:</strong> <button type="button" class="btn btn-default" ng-click="soft.cat = ''">{{soft.cat}} <span class="text-muted" aria-hidden="true">&times;</span></button></li>
+
+                <li class="pull-right"><button type="button" style="padding: 2px 6px;" class="btn btn-primary btn-small" title="Reset filters" ng-click="resetFilters()"><i class="fa fa-refresh"></i></button></li>
+            </ol>
+        </div>
+
+        <div class="media software-item" ng-repeat="item in filteredSoft | after:(pager.page-1)*pager.perPage | limitTo:20">
             <div class="media-left">
                 <img class="media-object" ng-src="{{item.icon}}" alt="{{item.title}}" title="{{item.title}}">
             </div>
             <div class="media-body">
-                <h4 class="media-heading">
-                    {{item.title}}
-                    <small ng-repeat="ver in item.versions" class="software-versions"><span class="fa fa-{{ver.osName}} text-muted"></span> {{ver.version}}</small>
+                <h4 class="media-heading" ng-bind-html="item.title | highlight:soft.search">
+
+                    <!--<small ng-repeat="ver in item.versions | orderBy:ver.os" class="software-versions"><span class="fa fa-{{ver.osName}} text-muted"></span></small>-->
                 </h4>
 
-                <div class="details-context">
-                    <span ng-repeat="loc in item.locations">{{loc.name}}</span>
+                <div ng-bind-html="item.description | highlight:soft.search"></div>
+
+                <div class="row">
+                    <div class="details-context col-md-6" ng-repeat="ver in item.versions | orderBy:os">
+                        <div class="h4 text-muted">
+                            <span class="fa fa-{{ver.osName}}"></span> {{ver.version}}
+                        </div>
+                        <span ng-repeat="loc in ver.locations">
+                            <span ng-if="loc.parent" ng-bind-html="(locations | filter:loc.parent)[0].name | highlight:soft.search"></span>
+                            <span ng-bind-html="loc.name | highlight:soft.search"></span>
+                        </span>
+                    </div>
                 </div>
-                <div>
-                    {{item.description}}
-                </div>
+
                 <div class="details hidden-xs">
-                    <div class="software-links pull-left">
-                        <h5>Tutorials &amp; Guides</h5>
-                        <ul>
+                    <div class="software-links" ng-if="item.links">
+                        <ul class="list-inline nav-justified" style="margin-top: 5px;">
                             <li ng-repeat="link in item.links">
                                 <a ng-href="{{link.url}}">{{link.title}}</a>
                             </li>
                         </ul>
                     </div>
-                    <div class="pull-left">
-                        <h5>Who can use it</h5>
-                        <span ng-bind-html="item.details"></span>
-                    </div>
                 </div>
+
             </div>
         </div>
 
         <div class="text-center">
-            <pagination total-items="filteredSoft.length" ng-model="soft.page" max-size="10" class="pagination-sm" boundary-links="true" items-per-page="soft.perPage" ng-change="update()" ng-if="filteredSoft.length > soft.perPage"></pagination>
+            <pagination class="pagination-sm" ng-model="pager.page" total-items="pager.totalItems" max-size="pager.maxSize" boundary-links="true" rotate="false" items-per-page="pager.perPage" ng-change="pageChange()" ng-if="pager.totalItems > pager.perPage"></pagination>
+        </div>
+
+        <div class="alert alert-warning text-center" role="alert" ng-show="pager.totalItems < 1">
+            <h2>
+                No <span ng-if="soft.cat"><strong>{{soft.cat | lowercase}}</strong></span> software is available
+                <span ng-if="soft.os">on <strong>{{soft.os == 1 ? 'Windows' : 'OS X'}}</strong> computers</span>
+                <span ng-if="soft.loc">in <strong>{{soft.loc}}</strong></span>
+                <span ng-if="soft.search">that matches the search "<strong>{{soft.search}}</strong>"</span>
+            </h2>
         </div>
     </div>
 </div>
