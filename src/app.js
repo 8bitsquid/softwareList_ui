@@ -5,6 +5,7 @@ angular.module('ualib.softwareList', [
     'angular.filter',
     'ui.bootstrap',
     'ui.utils',
+    'duScroll',
     'ualib.ui',
     'ualib.softwareList.templates'
 ]);

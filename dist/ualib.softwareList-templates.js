@@ -52,21 +52,24 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     "                    </label>\n" +
     "                </div>\n" +
     "            </div>\n" +
+    "            <div class=\"form-group hidden-xs\">\n" +
+    "                <button type=\"button\" class=\"btn btn-block btn-primary\" ng-click=\"resetFilters()\"><span class=\"fa fa-fw fa-refresh\"></span> Reset filters</button>\n" +
+    "            </div>\n" +
     "        </form>\n" +
     "    </div>\n" +
     "    <div class=\"col-md-9 col-md-pull-3 software-list-container\">\n" +
-    "        <div class=\"text-right\" ng-show=\"pager.totalItems > 0\">\n" +
+    "        <h4 class=\"text-right\" ng-show=\"pager.totalItems > 0\">\n" +
     "            Showing {{pager.firstItem}}-{{pager.lastItem}} of {{pager.totalItems}} results\n" +
-    "        </div>\n" +
+    "        </h4>\n" +
     "\n" +
     "        <div ng-if=\"(soft.cat || soft.os || soft.loc) && pager.totalItems > 0\">\n" +
     "\n" +
-    "            <ol class=\"breadcrumb\">\n" +
+    "            <ol class=\"breadcrumb facetcrumb\">\n" +
     "                <li ng-if=\"soft.os\"><strong>OS:</strong> <button type=\"button\" class=\"btn btn-default\" ng-click=\"soft.os = ''\">{{soft.os == 1 ? 'Windows' : 'OS X'}} <span class=\"text-muted\" aria-hidden=\"true\">&times;</span></button></li>\n" +
     "                <li ng-if=\"soft.loc\"><strong>Location:</strong> <button type=\"button\" class=\"btn btn-default\" ng-click=\"soft.loc = ''\">{{soft.loc}} <span class=\"text-muted\" aria-hidden=\"true\">&times;</span></button></li>\n" +
     "                <li ng-if=\"soft.cat\"><strong>Category:</strong> <button type=\"button\" class=\"btn btn-default\" ng-click=\"soft.cat = ''\">{{soft.cat}} <span class=\"text-muted\" aria-hidden=\"true\">&times;</span></button></li>\n" +
     "\n" +
-    "                <li class=\"pull-right\"><button type=\"button\" style=\"padding: 2px 6px;\" class=\"btn btn-primary btn-small\" title=\"Reset filters\" ng-click=\"resetFilters()\"><i class=\"fa fa-refresh\"></i></button></li>\n" +
+    "                <li class=\"pull-right\"><button type=\"button\" class=\"btn btn-primary btn-small reset-btn\" title=\"Reset filters\" ng-click=\"resetFilters()\"><i class=\"fa fa-refresh\"></i></button></li>\n" +
     "            </ol>\n" +
     "        </div>\n" +
     "\n" +
@@ -75,17 +78,16 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     "                <img class=\"media-object\" ng-src=\"{{item.icon}}\" alt=\"{{item.title}}\" title=\"{{item.title}}\">\n" +
     "            </div>\n" +
     "            <div class=\"media-body\">\n" +
-    "                <h4 class=\"media-heading\" ng-bind-html=\"item.title | highlight:soft.search\">\n" +
-    "\n" +
-    "                    <!--<small ng-repeat=\"ver in item.versions | orderBy:ver.os\" class=\"software-versions\"><span class=\"fa fa-{{ver.osName}} text-muted\"></span></small>-->\n" +
-    "                </h4>\n" +
+    "                <h3 class=\"media-heading\" ng-bind-html=\"item.title | highlight:soft.search\">\n" +
+    "                </h3>\n" +
     "\n" +
     "                <div ng-bind-html=\"item.description | highlight:soft.search\"></div>\n" +
     "\n" +
     "                <div class=\"row\">\n" +
     "                    <div class=\"details-context col-md-6\" ng-repeat=\"ver in item.versions | orderBy:os\">\n" +
     "                        <div class=\"h4 text-muted\">\n" +
-    "                            <span class=\"fa fa-{{ver.osName}}\"></span> {{ver.version}}\n" +
+    "                            <span class=\"fa fa-{{ver.osName}}\"></span>\n" +
+    "                            {{ver.version}}\n" +
     "                        </div>\n" +
     "                        <span ng-repeat=\"loc in ver.locations\">\n" +
     "                            <span ng-if=\"loc.parent\" ng-bind-html=\"(locations | filter:loc.parent)[0].name | highlight:soft.search\"></span>\n" +
@@ -95,15 +97,20 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     "                </div>\n" +
     "\n" +
     "                <div class=\"details hidden-xs\">\n" +
-    "                    <div class=\"software-links\" ng-if=\"item.links\">\n" +
+    "                    <div class=\"software-links\">\n" +
     "                        <ul class=\"list-inline nav-justified\" style=\"margin-top: 5px;\">\n" +
-    "                            <li ng-repeat=\"link in item.links\">\n" +
+    "                            <li ng-repeat=\"link in item.links\" ng-if=\"item.links\">\n" +
     "                                <a ng-href=\"{{link.url}}\">{{link.title}}</a>\n" +
+    "                            </li>\n" +
+    "                            <li ng-if=\"item.modules\">\n" +
+    "                                <div collapse=\"!isCollapsed\" ng-bind-html=\"item.modules | highlight:soft.search\"></div>\n" +
+    "                                <button class=\"btn btn-default btn-xs\" ng-click=\"isCollapsed = !isCollapsed\">\n" +
+    "                                    {{!isCollapsed ? \"Show\" : \"Hide\"}} Available Modules\n" +
+    "                                </button>\n" +
     "                            </li>\n" +
     "                        </ul>\n" +
     "                    </div>\n" +
     "                </div>\n" +
-    "\n" +
     "            </div>\n" +
     "        </div>\n" +
     "\n" +

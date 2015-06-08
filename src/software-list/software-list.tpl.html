@@ -48,21 +48,24 @@
                     </label>
                 </div>
             </div>
+            <div class="form-group hidden-xs">
+                <button type="button" class="btn btn-block btn-primary" ng-click="resetFilters()"><span class="fa fa-fw fa-refresh"></span> Reset filters</button>
+            </div>
         </form>
     </div>
     <div class="col-md-9 col-md-pull-3 software-list-container">
-        <div class="text-right" ng-show="pager.totalItems > 0">
+        <h4 class="text-right" ng-show="pager.totalItems > 0">
             Showing {{pager.firstItem}}-{{pager.lastItem}} of {{pager.totalItems}} results
-        </div>
+        </h4>
 
         <div ng-if="(soft.cat || soft.os || soft.loc) && pager.totalItems > 0">
 
-            <ol class="breadcrumb">
+            <ol class="breadcrumb facetcrumb">
                 <li ng-if="soft.os"><strong>OS:</strong> <button type="button" class="btn btn-default" ng-click="soft.os = ''">{{soft.os == 1 ? 'Windows' : 'OS X'}} <span class="text-muted" aria-hidden="true">&times;</span></button></li>
                 <li ng-if="soft.loc"><strong>Location:</strong> <button type="button" class="btn btn-default" ng-click="soft.loc = ''">{{soft.loc}} <span class="text-muted" aria-hidden="true">&times;</span></button></li>
                 <li ng-if="soft.cat"><strong>Category:</strong> <button type="button" class="btn btn-default" ng-click="soft.cat = ''">{{soft.cat}} <span class="text-muted" aria-hidden="true">&times;</span></button></li>
 
-                <li class="pull-right"><button type="button" style="padding: 2px 6px;" class="btn btn-primary btn-small" title="Reset filters" ng-click="resetFilters()"><i class="fa fa-refresh"></i></button></li>
+                <li class="pull-right"><button type="button" class="btn btn-primary btn-small reset-btn" title="Reset filters" ng-click="resetFilters()"><i class="fa fa-refresh"></i></button></li>
             </ol>
         </div>
 
@@ -71,17 +74,16 @@
                 <img class="media-object" ng-src="{{item.icon}}" alt="{{item.title}}" title="{{item.title}}">
             </div>
             <div class="media-body">
-                <h4 class="media-heading" ng-bind-html="item.title | highlight:soft.search">
-
-                    <!--<small ng-repeat="ver in item.versions | orderBy:ver.os" class="software-versions"><span class="fa fa-{{ver.osName}} text-muted"></span></small>-->
-                </h4>
+                <h3 class="media-heading" ng-bind-html="item.title | highlight:soft.search">
+                </h3>
 
                 <div ng-bind-html="item.description | highlight:soft.search"></div>
 
                 <div class="row">
                     <div class="details-context col-md-6" ng-repeat="ver in item.versions | orderBy:os">
                         <div class="h4 text-muted">
-                            <span class="fa fa-{{ver.osName}}"></span> {{ver.version}}
+                            <span class="fa fa-{{ver.osName}}"></span>
+                            {{ver.version}}
                         </div>
                         <span ng-repeat="loc in ver.locations">
                             <span ng-if="loc.parent" ng-bind-html="(locations | filter:loc.parent)[0].name | highlight:soft.search"></span>
@@ -91,15 +93,20 @@
                 </div>
 
                 <div class="details hidden-xs">
-                    <div class="software-links" ng-if="item.links">
+                    <div class="software-links">
                         <ul class="list-inline nav-justified" style="margin-top: 5px;">
-                            <li ng-repeat="link in item.links">
+                            <li ng-repeat="link in item.links" ng-if="item.links">
                                 <a ng-href="{{link.url}}">{{link.title}}</a>
+                            </li>
+                            <li ng-if="item.modules">
+                                <div collapse="!isCollapsed" ng-bind-html="item.modules | highlight:soft.search"></div>
+                                <button class="btn btn-default btn-xs" ng-click="isCollapsed = !isCollapsed">
+                                    {{!isCollapsed ? "Show" : "Hide"}} Available Modules
+                                </button>
                             </li>
                         </ul>
                     </div>
                 </div>
-
             </div>
         </div>
 

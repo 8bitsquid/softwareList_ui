@@ -43,7 +43,7 @@ angular.module('ualib.softwareList')
             });
     }])
 
-    .controller('SoftwareListCtrl', ['$scope', 'software', '$location', '$filter', function($scope, software, $location, $filter){
+    .controller('SoftwareListCtrl', ['$scope', 'software', '$location', '$filter', '$document', function($scope, software, $location, $filter, $document){
         var softwareList = [];
         $scope.soft = {};
         var defaults = {
@@ -88,6 +88,7 @@ angular.module('ualib.softwareList')
             }
         }, true);
 
+
         $scope.update = function(){
             var q = {};
             angular.forEach(soft, function(val, key){
@@ -96,6 +97,11 @@ angular.module('ualib.softwareList')
                }
             });
             $location.search(q);
+        };
+
+        $scope.pageChange = function(){
+            $location.search('page', $scope.pager.page);
+            $document.duScrollTo(0, 30, 500, function (t) { return (--t)*t*t+1; });
         };
 
         $scope.resetFilters = function(){
@@ -129,7 +135,11 @@ angular.module('ualib.softwareList')
 
             $scope.pager.totalItems = $scope.filteredSoft.length;
             $scope.pager.firstItem = (($scope.pager.page-1)*$scope.pager.perPage)+1;
-            $scope.pager.lastItem = $scope.pager.page*($scope.pager.totalItems < $scope.pager.maxSize ? $scope.pager.totalItems : $scope.pager.perPage);
+            //$scope.pager.lastItem = $scope.pager.page*(($scope.pager.totalItems < $scope.pager.maxSize) ? $scope.pager.totalItems : $scope.pager.perPage);
+            $scope.pager.lastItem = $scope.pager.totalItems < $scope.pager.perPage ?  $scope.pager.totalItems : ($scope.pager.page * $scope.pager.perPage);
+
+
+
             var numPages =  Math.floor($scope.pager.totalItems / $scope.pager.maxSize);
             if (numPages < $scope.pager.page){
                 $scope.pager.page = numPages || 1;
