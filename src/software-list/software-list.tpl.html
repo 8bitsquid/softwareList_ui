@@ -96,7 +96,7 @@
                     <div class="software-links">
                         <ul class="list-inline nav-justified" style="margin-top: 5px;">
                             <li ng-repeat="link in item.links" ng-if="item.links">
-                                <a ng-href="{{link.url}}">{{link.title}}</a>
+                                <a ng-href="{{link.url}}" class="external-link">{{link.title}}</a>
                             </li>
                             <li ng-if="item.modules">
                                 <div collapse="!isCollapsed" ng-bind-html="item.modules | highlight:soft.search"></div>

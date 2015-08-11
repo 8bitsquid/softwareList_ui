@@ -100,7 +100,7 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     "                    <div class=\"software-links\">\n" +
     "                        <ul class=\"list-inline nav-justified\" style=\"margin-top: 5px;\">\n" +
     "                            <li ng-repeat=\"link in item.links\" ng-if=\"item.links\">\n" +
-    "                                <a ng-href=\"{{link.url}}\">{{link.title}}</a>\n" +
+    "                                <a ng-href=\"{{link.url}}\" class=\"external-link\">{{link.title}}</a>\n" +
     "                            </li>\n" +
     "                            <li ng-if=\"item.modules\">\n" +
     "                                <div collapse=\"!isCollapsed\" ng-bind-html=\"item.modules | highlight:soft.search\"></div>\n" +
