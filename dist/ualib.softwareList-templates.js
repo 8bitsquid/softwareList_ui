@@ -73,7 +73,7 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     "            </ol>\n" +
     "        </div>\n" +
     "\n" +
-    "        <div class=\"media software-item\" ng-repeat=\"item in filteredSoft | after:(pager.page-1)*pager.perPage | limitTo:20\">\n" +
+    "        <div class=\"media software-item animate-repeat\" ng-repeat=\"item in filteredSoft | after:(pager.page-1)*pager.perPage | limitTo:20\">\n" +
     "            <div class=\"media-left\">\n" +
     "                <img class=\"media-object\" ng-src=\"{{item.icon}}\" alt=\"{{item.title}}\" title=\"{{item.title}}\">\n" +
     "            </div>\n" +

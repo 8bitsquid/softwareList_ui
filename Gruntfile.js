@@ -68,10 +68,22 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        ngAnnotate: {
+            options: {
+                singleQuotes: true
+            },
+            app: {
+                files: [
+                    {
+                        'dist/<%= pkg.name %>.js': ['dist/<%= pkg.name %>.js']
+                    }
+                ]
+            }
+        },
         uglify: {
             dist: {
                 files: {
-                    'src/<%= pkg.name %>.min.js': ['dist/*.js']
+                    'dist/<%= pkg.name %>.min.js': ['dist/*.js', '!dist/*.min.js']
                 }
             }
         },
@@ -134,9 +146,11 @@ module.exports = function(grunt) {
         'copy'
     ]);
     grunt.registerTask('build', [
+        'html2js',
         'jshint',
         'copy',
-        'less:build',
-        'uglify'
+        'ngAnnotate',
+        'uglify',
+        'less:build'
     ]);
 };

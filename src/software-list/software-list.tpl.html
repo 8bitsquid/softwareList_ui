@@ -69,7 +69,7 @@
             </ol>
         </div>
 
-        <div class="media software-item" ng-repeat="item in filteredSoft | after:(pager.page-1)*pager.perPage | limitTo:20">
+        <div class="media software-item animate-repeat" ng-repeat="item in filteredSoft | after:(pager.page-1)*pager.perPage | limitTo:20">
             <div class="media-left">
                 <img class="media-object" ng-src="{{item.icon}}" alt="{{item.title}}" title="{{item.title}}">
             </div>

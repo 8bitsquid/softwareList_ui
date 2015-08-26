@@ -2,6 +2,7 @@ angular.module('ualib.softwareList', [
     'ngRoute',
     'ngResource',
     'ngSanitize',
+    'ngAnimate',
     'angular.filter',
     'ui.bootstrap',
     'ui.utils',
@@ -11,7 +12,12 @@ angular.module('ualib.softwareList', [
 ]);;angular.module('ualib.softwareList')
 
     .factory('softwareFactory', ['$resource', function($resource){
-        return $resource('https://wwwdev2.lib.ua.edu/softwareList/api/:software');
+        return $resource('//wwwdev2.lib.ua.edu/softwareList/api/:software', {software: 'all'}, {
+            get: {
+                method: 'GET',
+                cache: true
+            }
+        });
     }]);;angular.module('ualib.softwareList')
 
     .config(['$routeProvider', function($routeProvider){
@@ -19,7 +25,7 @@ angular.module('ualib.softwareList', [
             .when('/software', {
                 reloadOnSearch: false,
                 resolve: {
-                    software: function(softwareFactory){
+                    software: ['softwareFactory', function(softwareFactory){
                         return softwareFactory.get({software: 'all'}, function(data){
                             for (var i = 0, len = data.software.length; i < len; i++){
 
@@ -50,7 +56,7 @@ angular.module('ualib.softwareList', [
                                 config: config
                             });
                         });
-                    }
+                    }]
                 },
                 templateUrl: 'software-list/software-list.tpl.html',
                 controller: 'SoftwareListCtrl'
