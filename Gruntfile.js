@@ -83,7 +83,7 @@ module.exports = function(grunt) {
         uglify: {
             dist: {
                 files: {
-                    'dist/<%= pkg.name %>.min.js': ['dist/*.js', '!dist/*.min.js']
+                    'dist/<%= pkg.name %>.min.js': ['dist/<%= pkg.name %>-templates.js', 'dist/<%= pkg.name %>.js']
                 }
             }
         },

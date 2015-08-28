@@ -25,7 +25,7 @@ angular.module('ualib.softwareList', [
             .when('/software', {
                 reloadOnSearch: false,
                 resolve: {
-                    software: ['softwareFactory', function(softwareFactory){
+                    software: function(softwareFactory){
                         return softwareFactory.get({software: 'all'}, function(data){
                             for (var i = 0, len = data.software.length; i < len; i++){
 
@@ -56,7 +56,7 @@ angular.module('ualib.softwareList', [
                                 config: config
                             });
                         });
-                    }]
+                    }
                 },
                 templateUrl: 'software-list/software-list.tpl.html',
                 controller: 'SoftwareListCtrl'
