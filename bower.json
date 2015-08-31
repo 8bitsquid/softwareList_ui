@@ -1,12 +1,12 @@
 {
   "name": "softwareList_ui",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "homepage": "https://github.com/ualibweb/softwareList_ui",
   "description": "Software List for the University of Alabama Libraries",
   "main": [
-    "softwareList_ui-templates.js",
-    "softwareList_ui.js",
-    "softwareList_ui.css"
+    "ualib.softwareList-templates.js",
+    "ualib.softwareList.js",
+    "ualib.softwareList.css"
   ],
   "moduleType": [
     "node"
