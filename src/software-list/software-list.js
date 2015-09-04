@@ -74,7 +74,16 @@ angular.module('ualib.softwareList')
                 }
             }
 
-            processSoftwareList(data.software);
+            //Scope watchers and listeners
+            $scope.$on('$locationChangeSuccess', function(){
+                processSoftwareList(softwareList);
+            });
+
+            $scope.$on('$destroy', function(){
+                filterWatcher();
+            });
+
+            processSoftwareList(softwareList);
         });
 
         var filterWatcher = $scope.$watch('soft', function(newVal, oldVal){
@@ -113,15 +122,6 @@ angular.module('ualib.softwareList')
             };
             angular.copy(defaults, $scope.soft);
         };
-
-        //Scope watchers and listeners
-        $scope.$on('$locationChangeSuccess', function(){
-            processSoftwareList(softwareList);
-        });
-
-        $scope.$on('$destroy', function(){
-            filterWatcher();
-        });
 
         function processSoftwareList(softwareList){
             var filtered = softwareList;
