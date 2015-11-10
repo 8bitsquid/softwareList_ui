@@ -5,8 +5,9 @@ angular.module('ualib.softwareList')
             .when('/software', {
                 reloadOnSearch: false,
                 resolve: {
-                    software: function(softwareFactory){
+                    software: function($filter, softwareFactory){
                         return softwareFactory.get({software: 'all'}, function(data){
+
                             for (var i = 0, len = data.software.length; i < len; i++){
 
                                 // insert OS string names for easier ng-repeat filtering
@@ -25,7 +26,10 @@ angular.module('ualib.softwareList')
                                     }
                                 }
                                 data.software[i].os = os.join('');
+
+
                             }
+
                             return data;
                         }, function(data, status, headers, config) {
                             console.log('ERROR: software list');
@@ -126,8 +130,8 @@ angular.module('ualib.softwareList')
         function processSoftwareList(softwareList){
             var filtered = softwareList;
 
-            filtered = $filter('filter')(filtered, $scope.soft.cat);
-            filtered = $filter('filter')(filtered, $scope.soft.loc);
+            filtered = $filter('filter')(filtered, {categories: $scope.soft.cat});
+            filtered = $filter('filter')(filtered, {versions: $scope.soft.loc});
             filtered = $filter('filter')(filtered, $scope.soft.search);
             filtered = $filter('filterBy')(filtered, ['os'], $scope.soft.os);
 

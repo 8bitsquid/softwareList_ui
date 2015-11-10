@@ -58,7 +58,7 @@
             Showing {{pager.firstItem}}-{{pager.lastItem}} of {{pager.totalItems}} results
         </h4>
 
-        <div ng-if="(soft.cat || soft.os || soft.loc) && pager.totalItems > 0">
+        <div ng-if="(soft.cat || soft.os || soft.loc)">
 
             <ol class="breadcrumb facetcrumb">
                 <li ng-if="soft.os"><strong>OS:</strong> <button type="button" class="btn btn-default" ng-click="soft.os = ''">{{soft.os == 1 ? 'Windows' : 'OS X'}} <span class="text-muted" aria-hidden="true">&times;</span></button></li>
@@ -85,7 +85,7 @@
                             <span class="fa fa-{{ver.osName}}"></span>
                             {{ver.version}}
                         </div>
-                        <span ng-repeat="loc in ver.locations">
+                        <span ng-repeat="loc in ver.locations | orderBy:'name'">
                             <span ng-if="loc.parent" ng-bind-html="(locations | filter:loc.parent)[0].name | highlight:soft.search"></span>
                             <span ng-bind-html="loc.name | highlight:soft.search"></span>
                         </span>
