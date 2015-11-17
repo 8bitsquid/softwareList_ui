@@ -83,11 +83,11 @@
                     <div class="details-context col-md-6" ng-repeat="ver in item.versions | orderBy:os">
                         <div class="h4 text-muted">
                             <span class="fa fa-{{ver.osName}}"></span>
-                            {{ver.version}}
+                            Version {{ver.version}}
                         </div>
                         <span ng-repeat="loc in ver.locations | orderBy:'name'">
-                            <span ng-if="loc.parent" ng-bind-html="(locations | filter:loc.parent)[0].name | highlight:soft.search"></span>
-                            <span ng-bind-html="loc.name | highlight:soft.search"></span>
+                            <!--<span ng-if="loc.parent" ng-bind-html="(locations | filter:loc.parent)[0].name"></span>-->
+                            <span ng-bind-html="loc.name | highlight:soft.search | highlight:soft.loc:true"></span>
                         </span>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
                     <div class="software-links">
                         <ul class="list-inline nav-justified" style="margin-top: 5px;">
                             <li ng-repeat="link in item.links" ng-if="item.links">
-                                <a ng-href="{{link.url}}" class="external-link">{{link.title}}</a>
+                                <a ng-href="{{link.url}}" target="{{link.title}}" class="external-link">{{link.title}}</a>
                             </li>
                             <li ng-if="item.modules">
                                 <div collapse="!isCollapsed" ng-bind-html="item.modules | highlight:soft.search"></div>

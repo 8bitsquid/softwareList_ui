@@ -87,11 +87,11 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     "                    <div class=\"details-context col-md-6\" ng-repeat=\"ver in item.versions | orderBy:os\">\n" +
     "                        <div class=\"h4 text-muted\">\n" +
     "                            <span class=\"fa fa-{{ver.osName}}\"></span>\n" +
-    "                            {{ver.version}}\n" +
+    "                            Version {{ver.version}}\n" +
     "                        </div>\n" +
     "                        <span ng-repeat=\"loc in ver.locations | orderBy:'name'\">\n" +
-    "                            <span ng-if=\"loc.parent\" ng-bind-html=\"(locations | filter:loc.parent)[0].name | highlight:soft.search\"></span>\n" +
-    "                            <span ng-bind-html=\"loc.name | highlight:soft.search\"></span>\n" +
+    "                            <!--<span ng-if=\"loc.parent\" ng-bind-html=\"(locations | filter:loc.parent)[0].name\"></span>-->\n" +
+    "                            <span ng-bind-html=\"loc.name | highlight:soft.search | highlight:soft.loc:true\"></span>\n" +
     "                        </span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
@@ -100,7 +100,7 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     "                    <div class=\"software-links\">\n" +
     "                        <ul class=\"list-inline nav-justified\" style=\"margin-top: 5px;\">\n" +
     "                            <li ng-repeat=\"link in item.links\" ng-if=\"item.links\">\n" +
-    "                                <a ng-href=\"{{link.url}}\" class=\"external-link\">{{link.title}}</a>\n" +
+    "                                <a ng-href=\"{{link.url}}\" target=\"{{link.title}}\" class=\"external-link\">{{link.title}}</a>\n" +
     "                            </li>\n" +
     "                            <li ng-if=\"item.modules\">\n" +
     "                                <div collapse=\"!isCollapsed\" ng-bind-html=\"item.modules | highlight:soft.search\"></div>\n" +
@@ -136,7 +136,6 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     'ngAnimate',
     'angular.filter',
     'ui.bootstrap',
-    'ui.utils',
     'duScroll',
     'ualib.ui',
     'ualib.softwareList.templates'

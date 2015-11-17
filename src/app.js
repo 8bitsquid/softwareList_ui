@@ -5,7 +5,6 @@ angular.module('ualib.softwareList', [
     'ngAnimate',
     'angular.filter',
     'ui.bootstrap',
-    'ui.utils',
     'duScroll',
     'ualib.ui',
     'ualib.softwareList.templates'
