@@ -13,14 +13,14 @@
     <meta name="viewport" content="width=device-width">
     
     <link rel="stylesheet" id="roots_cdn-css" href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,700|Oxygen:300,400,700|Open+Sans:300,400,600,700|EB+Garamond|Lato:300,400,700" type="text/css" media="all">
-
-    <link rel="stylesheet" href="https://rawgit.com/ualibweb/roots-ualib/master/assets/css/main.css">
+    <link rel="stylesheet" href="http://localhost/wordpress/wp-content/themes/roots-ualib/assets/css/main.css">
+    <!--<link rel="stylesheet" href="https://rawgit.com/ualibweb/roots-ualib/master/assets/css/main.css">-->
     <link rel="stylesheet" href="https://rawgit.com/ualibweb/roots-ualib/master/assets/css/main_bower.css">
-    <!--<link rel="stylesheet" href="<%= pkg.name %>.css">-->
-    <link rel="stylesheet" href="<%= pkg.name %>.min.css">
+    <link rel="stylesheet" href="<%= pkg.name %>.css">
+    <!--<link rel="stylesheet" href="<%= pkg.name %>.min.css">-->
 </head>
 <body>
-<div class="wrap container" role="document">
+<div class="wrap" role="document">
     <div class="content row">
         <main class="main" role="main">
             <div class="reveal-animation" ng-view></div>
@@ -42,8 +42,8 @@
 <script src="../bower_components/angular-scroll/angular-scroll.js"></script>
 <script src="../bower_components/ualib-ui/dist/ualib-ui.js"></script>
 <!-- endbower -->
-<!--<script src="../dist/<%= pkg.name %>.js"></script>-->
-<script src="../dist/<%= pkg.name %>.min.js"></script>
+<script src="../dist/<%= pkg.name %>.js"></script>
+<!--<script src="../dist/<%= pkg.name %>.min.js"></script>-->
 
 </body>
 </html>
