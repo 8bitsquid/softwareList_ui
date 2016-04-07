@@ -167,7 +167,7 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
             .when('/software', {
                 reloadOnSearch: false,
                 resolve: {
-                    software: ['$filter', 'softwareFactory', function($filter, softwareFactory){
+                    software: function($filter, softwareFactory){
                         return softwareFactory.get({software: 'all'}, function(data){
 
                             for (var i = 0, len = data.software.length; i < len; i++){
@@ -202,7 +202,7 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
                                 config: config
                             });
                         });
-                    }]
+                    }
                 },
                 templateUrl: 'software-list/software-list.tpl.html',
                 controller: 'SoftwareListCtrl'

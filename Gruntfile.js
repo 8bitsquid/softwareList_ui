@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
     // Show elapsed time
     require('time-grunt')(grunt);
-
+    var serveStatic = require('serve-static');
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -63,8 +63,8 @@ module.exports = function(grunt) {
                     }
                 },
                 files: [{
-                    src: 'src/demo.html',
-                    dest: 'dist/demo.html'
+                    src: 'src/index.html',
+                    dest: 'dist/index.html'
                 }]
             }
         },
@@ -90,13 +90,120 @@ module.exports = function(grunt) {
         clean: {
             app: ['tmp/']
         },
+        watch: {
+            less: {
+                files: ['src/**/*.less'],
+                tasks: ['less:dev']
+            },
+            ng: {
+                files: ['src/**/*.js', 'src/**/*.tpl.html'],
+                tasks: ['html2js', 'jshint', 'concat', 'clean', 'ngdocs']
+            },
+            index: {
+                files: ['src/index.html'],
+                tasks: ['copy', 'dev_prod_switch:dev']
+            },
+            livereload: {
+                // Here we watch the files the sass task will compile to
+                // These files are sent to the live reload server after sass compiles to them
+                options: { livereload: true },
+                files: ['dist/**/*', 'docs/**/*']
+            }
+        },
+        connect: {
+            live: {
+                options: {
+                    open: true,
+                    keepalive: true,
+                    hostname: 'localhost',
+                    base: {
+                        path: 'dist',
+                        options: {
+                            index: 'index.html'
+                        }
+                    },
+                    middleware: function(connect) {
+                        return [
+                            serveStatic('.tmp'),
+                            connect().use('/bower_components', serveStatic('./bower_components')),
+                            serveStatic('./dist')
+                        ];
+                    }
+                }
+            },
+            dev: {
+                options: {
+                    livereload: true,
+                    open: true,
+                    hostname: 'localhost',
+                    base: {
+                        path: 'dist',
+                        options: {
+                            index: 'index.html'
+                        }
+                    },
+                    middleware: function(connect) {
+                        return [
+                            serveStatic('.tmp'),
+                            connect().use('/bower_components', serveStatic('./bower_components')),
+                            serveStatic('./dist')
+                        ];
+                    }
+                }
+            },
+            docs: {
+                options: {
+                    livereload: true,
+                    open: true,
+                    hostname: 'localhost',
+                    base: {
+                        path: 'docs',
+                        options: {
+                            index: 'index.html'
+                        }
+                    }
+                }
+            }
+        },
+        dev_prod_switch: {
+            dev: {
+                options: {
+                    environment: 'dev'
+                },
+                files: {
+                    'dist/index.html': 'dist/index.html'
+                }
+            },
+            live: {
+                options: {
+                    environment: 'prod'
+                },
+                files: {
+                    'dist/index.html': 'dist/index.html'
+                }
+            }
+        },
         wiredep: {
             demo: {
                 src: [
-                    'src/demo.html'
+                    'src/index.html'
                 ],
+                ignorePath: '../',
                 options: {
                     devDependencies: true
+                },
+                fileTypes: {
+                    html: {
+                        block: /(([ \t]*)<!--\s*bower:*(\S*)\s*-->)(\n|\r|.)*?(<!--\s*endbower\s*-->)/gi,
+                        detect: {
+                            js: /<script.*src=['"]([^'"]+)/gi,
+                            css: /<link.*href=['"]([^'"]+)/gi
+                        },
+                        replace: {
+                            js: '<script src="/{{filePath}}"></script>',
+                            css: '<link rel="stylesheet" href="/{{filePath}}">'
+                        }
+                    }
                 }
             }
         },
@@ -118,44 +225,38 @@ module.exports = function(grunt) {
                 regExp: false
             }
         },
-        watch: {
-            less: {
-                files: [
-                    'src/*.less',
-                    'src/**/*.less'
-                ],
-                tasks: ['less:dev']
-            },
-            js: {
-                files: [
-                    'src/*.js',
-                    'src/**/.js'
-                ],
-                tasks: ['jshint', 'concat']
-            }
+        auto_install: {
+            local: {}
         }
     });
 
     // Register tasks
     grunt.registerTask('default', [
-        'dev'
+        'dev-build', 'connect:dev', 'watch'
     ]);
-    grunt.registerTask('dev', [
+    grunt.registerTask('dev-build', [
+        'auto_install',
         'html2js',
         'jshint',
         'less:dev',
         'concat',
         'wiredep',
         'copy',
-        'clean'
+        'clean',
+        'dev_prod_switch:dev'
     ]);
-    grunt.registerTask('build', [
+    grunt.registerTask('live-build', [
+        'auto_install',
         'html2js',
         'jshint',
         'copy',
         'ngAnnotate',
         'uglify',
         'less:build',
-        'clean'
+        'clean',
+        'dev_prod_switch:live'
     ]);
+
+    grunt.registerTask('docs', ['connect:docs', 'watch']);
+    grunt.registerTask('demo-live', ['live-build', 'connect:live']);
 };
