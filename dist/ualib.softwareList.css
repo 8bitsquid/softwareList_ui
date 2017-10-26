@@ -17,4 +17,7 @@
 .software-list-container .details ul {
   list-style-type: none;
 }
+.software-list-facets .btn-group-justified .btn {
+  width: 33%;
+}
 /*# sourceMappingURL=dist/ualib.softwareList.css.map */

@@ -25,24 +25,26 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     "<div class=\"container\">\n" +
     "    <div class=\"row\">\n" +
     "        <div class=\"col-md-3 col-md-push-9\">\n" +
-    "            <form>\n" +
+    "            <form class=\"software-list-facets\">\n" +
     "                <div class=\"form-group\">\n" +
     "                <span class=\"page-header\">\n" +
-    "                    <h4>Filter Software List By</h4>\n" +
+    "                    <h2 class=\"h4\">Filter Software List By</h2>\n" +
     "                </span>\n" +
     "                </div>\n" +
     "                <div class=\"form-group\">\n" +
-    "                    <input type=\"text\" class=\"form-control\" ng-model=\"soft.search\" placeholder=\"Search software, locations, etc...\">\n" +
+    "\n" +
+    "                    <input type=\"text\" class=\"form-control\" ng-model=\"soft.search\" placeholder=\"Search software, locations, etc...\" aria-label=\"Search our software list\">\n" +
+    "\n" +
     "                </div>\n" +
     "                <div class=\"form-group\">\n" +
     "                    <div class=\"btn-group btn-group-justified\">\n" +
-    "                        <label class=\"btn btn-default active\" ng-model=\"soft.os\" btn-radio=\"''\" uncheckable>All</label>\n" +
-    "                        <label class=\"btn btn-default\" ng-model=\"soft.os\" btn-radio=\"'1'\" uncheckable><span class=\"fa fa-fw fa-windows\"></span></label>\n" +
-    "                        <label class=\"btn btn-default\" ng-model=\"soft.os\" btn-radio=\"'2'\" uncheckable><span class=\"fa fa-fw fa-apple\"></span></label>\n" +
+    "                        <button class=\"btn btn-default active\" ng-model=\"soft.os\" btn-radio=\"''\" uncheckable>All</button>\n" +
+    "                        <button class=\"btn btn-default\" ng-model=\"soft.os\" btn-radio=\"'1'\" uncheckable><span class=\"fa fa-fw fa-windows\"></span><span class=\"sr-only\">Windows</span></button>\n" +
+    "                        <button class=\"btn btn-default\" ng-model=\"soft.os\" btn-radio=\"'2'\" uncheckable><span class=\"fa fa-fw fa-apple\"></span><span class=\"sr-only\">Mac</span></button>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"form-group hidden-xs\">\n" +
-    "                    <h5>Locations</h5>\n" +
+    "                    <h3 class=\"h5\">Locations</h3>\n" +
     "                    <div class=\"radio\">\n" +
     "                        <label>\n" +
     "                            <input type=\"radio\" value=\"\" ng-model=\"soft.loc\" checked>\n" +
@@ -57,7 +59,7 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"form-group hidden-xs\">\n" +
-    "                    <h5>Categories</h5>\n" +
+    "                    <h3 class=\"h5\">Categories</h3>\n" +
     "                    <div class=\"radio\">\n" +
     "                        <label>\n" +
     "                            <input type=\"radio\" value=\"\" ng-model=\"soft.cat\">\n" +
@@ -77,9 +79,9 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     "            </form>\n" +
     "        </div>\n" +
     "        <div class=\"col-md-9 col-md-pull-3 software-list-container\">\n" +
-    "            <h4 class=\"text-right\" ng-show=\"pager.totalItems > 0\">\n" +
+    "            <span class=\"h4 text-right\" ng-show=\"pager.totalItems > 0\">\n" +
     "                Showing {{pager.firstItem}}-{{pager.lastItem}} of {{pager.totalItems}} results\n" +
-    "            </h4>\n" +
+    "            </span>\n" +
     "\n" +
     "            <div ng-if=\"(soft.cat || soft.os || soft.loc)\">\n" +
     "\n" +
@@ -94,7 +96,7 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
     "\n" +
     "            <div class=\"media software-item animate-repeat\" ng-repeat=\"item in filteredSoft | after:(pager.page-1)*pager.perPage | limitTo:20\">\n" +
     "                <div class=\"media-left\">\n" +
-    "                    <img class=\"media-object\" ng-src=\"{{item.icon}}\" alt=\"{{item.title}}\" title=\"{{item.title}}\">\n" +
+    "                    <img class=\"media-object\" ng-src=\"{{item.icon}}\" alt=\"{{item.title}}\">\n" +
     "                </div>\n" +
     "                <div class=\"media-body\">\n" +
     "                    <h3 class=\"media-heading\" ng-bind-html=\"item.title | highlight:soft.search\">\n" +
@@ -175,7 +177,7 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
             .when('/software', {
                 reloadOnSearch: false,
                 resolve: {
-                    software: ['$filter', 'softwareFactory', function($filter, softwareFactory){
+                    software: function($filter, softwareFactory){
                         return softwareFactory.get({software: 'all'}, function(data){
 
                             for (var i = 0, len = data.software.length; i < len; i++){
@@ -210,7 +212,7 @@ angular.module("software-list/software-list.tpl.html", []).run(["$templateCache"
                                 config: config
                             });
                         });
-                    }]
+                    }
                 },
                 templateUrl: 'software-list/software-list.tpl.html',
                 controller: 'SoftwareListCtrl'

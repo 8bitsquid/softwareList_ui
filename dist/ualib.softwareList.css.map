@@ -1,1 +1,1 @@
-{"version":3,"sources":["src/software-list/software-list.less"],"names":[],"mappings":"AAAA,wBACE;EACE,gBAAA;;AAFJ,wBACE,eAGE;EACE,WAAA;EACA,YAAA;;AANN,wBAUE;EACE,kBAAA;;AAXJ,wBAcE,SACE;EACE,mBAAA;;AAhBN,wBAcE,SAIE,gBACE;EACE,mBAAA;;AApBR,wBAcE,SAUE;EACE,qBAAA"}
+{"version":3,"sources":["src/software-list/software-list.less"],"names":[],"mappings":"AAAA,wBACE;EACE,gBAAA;;AAFJ,wBACE,eAGE;EACE,WAAA;EACA,YAAA;;AANN,wBAUE;EACE,kBAAA;;AAXJ,wBAcE,SACE;EACE,mBAAA;;AAhBN,wBAcE,SAIE,gBACE;EACE,mBAAA;;AApBR,wBAcE,SAUE;EACE,qBAAA;;AAMN,qBACE,qBACE;EACE,UAAA"}

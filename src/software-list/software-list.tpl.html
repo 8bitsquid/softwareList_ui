@@ -21,24 +21,26 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3 col-md-push-9">
-            <form>
+            <form class="software-list-facets">
                 <div class="form-group">
                 <span class="page-header">
-                    <h4>Filter Software List By</h4>
+                    <h2 class="h4">Filter Software List By</h2>
                 </span>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" ng-model="soft.search" placeholder="Search software, locations, etc...">
+
+                    <input type="text" class="form-control" ng-model="soft.search" placeholder="Search software, locations, etc..." aria-label="Search our software list">
+
                 </div>
                 <div class="form-group">
                     <div class="btn-group btn-group-justified">
-                        <label class="btn btn-default active" ng-model="soft.os" btn-radio="''" uncheckable>All</label>
-                        <label class="btn btn-default" ng-model="soft.os" btn-radio="'1'" uncheckable><span class="fa fa-fw fa-windows"></span></label>
-                        <label class="btn btn-default" ng-model="soft.os" btn-radio="'2'" uncheckable><span class="fa fa-fw fa-apple"></span></label>
+                        <button class="btn btn-default active" ng-model="soft.os" btn-radio="''" uncheckable>All</button>
+                        <button class="btn btn-default" ng-model="soft.os" btn-radio="'1'" uncheckable><span class="fa fa-fw fa-windows"></span><span class="sr-only">Windows</span></button>
+                        <button class="btn btn-default" ng-model="soft.os" btn-radio="'2'" uncheckable><span class="fa fa-fw fa-apple"></span><span class="sr-only">Mac</span></button>
                     </div>
                 </div>
                 <div class="form-group hidden-xs">
-                    <h5>Locations</h5>
+                    <h3 class="h5">Locations</h3>
                     <div class="radio">
                         <label>
                             <input type="radio" value="" ng-model="soft.loc" checked>
@@ -53,7 +55,7 @@
                     </div>
                 </div>
                 <div class="form-group hidden-xs">
-                    <h5>Categories</h5>
+                    <h3 class="h5">Categories</h3>
                     <div class="radio">
                         <label>
                             <input type="radio" value="" ng-model="soft.cat">
@@ -73,9 +75,9 @@
             </form>
         </div>
         <div class="col-md-9 col-md-pull-3 software-list-container">
-            <h4 class="text-right" ng-show="pager.totalItems > 0">
+            <span class="h4 text-right" ng-show="pager.totalItems > 0">
                 Showing {{pager.firstItem}}-{{pager.lastItem}} of {{pager.totalItems}} results
-            </h4>
+            </span>
 
             <div ng-if="(soft.cat || soft.os || soft.loc)">
 
@@ -90,7 +92,7 @@
 
             <div class="media software-item animate-repeat" ng-repeat="item in filteredSoft | after:(pager.page-1)*pager.perPage | limitTo:20">
                 <div class="media-left">
-                    <img class="media-object" ng-src="{{item.icon}}" alt="{{item.title}}" title="{{item.title}}">
+                    <img class="media-object" ng-src="{{item.icon}}" alt="{{item.title}}">
                 </div>
                 <div class="media-body">
                     <h3 class="media-heading" ng-bind-html="item.title | highlight:soft.search">
